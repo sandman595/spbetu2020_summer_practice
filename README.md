@@ -1,1 +1,0 @@
-# spbetu2020_summer_practice
