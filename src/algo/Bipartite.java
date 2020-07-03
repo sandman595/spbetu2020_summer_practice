@@ -32,7 +32,7 @@ public class Bipartite {
 
     private void initializeAll(ArrayList<MatchingData> usersData, ArrayList<MatchingData> groupData) {
         initializeSide(firstSide, usersData);
-        initializeSide(secondSide, groupData);
+        //initializeSide(secondSide, groupData);
         initializeMatching();
         initializeResult(usersData, groupData);
     }
@@ -141,12 +141,12 @@ public class Bipartite {
     }
 
     public ArrayList<Edge> getMaxMatching() {
-        resetSide(secondSide);
+        //resetSide(secondSide);
         prepareParents();
         ArrayList<Edge> result = new ArrayList<>();
         for (Map.Entry<GraphNode, GraphNode> currentEdge : resultMatching.entrySet()) {
             if (currentEdge.getValue() != null)
-                result.add(new Edge(currentEdge.getKey(), currentEdge.getValue()));
+                result.add(new Edge(currentEdge.getValue(), currentEdge.getKey()));
         }
         return result;
     }
