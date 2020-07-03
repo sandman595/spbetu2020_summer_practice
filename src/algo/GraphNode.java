@@ -12,6 +12,14 @@ public class GraphNode {
     public String getName() {
         return name;
     }
+
+    public Boolean accept(Visitor visitor) {
+        return visitor.visit(this);
+    }
+
+    public String toString() {
+        return name;
+    }
 }
 
 class UserNode extends GraphNode {
