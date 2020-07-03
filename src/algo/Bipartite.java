@@ -17,26 +17,36 @@ public class Bipartite {
     private HashMap<GraphNode, ArrayList<SemiEdge>> secondSide;
     private HashMap<GraphNode, Sides> nodeMatching;
     private HashMap<Sides, HashMap<GraphNode, ArrayList<SemiEdge>>> sideMatching;
-    private HashMap<GraphNode, GraphNode> firstSideParent;
-    private HashMap<GraphNode, GraphNode> secondSideParent;
+    private HashMap<GraphNode, GraphNode> resultMatching;
 
     public Bipartite(ArrayList<MatchingData> usersData, ArrayList<MatchingData> groupData) {
         firstSide = new HashMap<>();
         secondSide = new HashMap<>();
-        nodeMatching = new HashMap<GraphNode, Sides>();
+        nodeMatching = new HashMap<>();
+        resultMatching = new HashMap<>();
         initializeAll(usersData, groupData);
         sideMatching = new HashMap<>();
         sideMatching.put(Sides.FIRST, firstSide);
         sideMatching.put(Sides.SECOND, secondSide);
-        firstSideParent = new HashMap<>();
-        secondSideParent = new HashMap<>();
-        initializeParents();
     }
 
     private void initializeAll(ArrayList<MatchingData> usersData, ArrayList<MatchingData> groupData) {
         initializeSide(firstSide, usersData);
         initializeSide(secondSide, groupData);
         initializeMatching();
+        initializeResult(usersData, groupData);
+    }
+
+    private void initializeResult(ArrayList<MatchingData> usersData, ArrayList<MatchingData> groupData) {}
+
+    public void setMatching(GraphNode lhs, GraphNode rhs) {
+        resultMatching.put(lhs, rhs);
+    }
+
+    public GraphNode getMatching(GraphNode node) {
+        if (resultMatching.containsKey(node))
+            return resultMatching.get(node);
+        return null;
     }
 
     private void initializeMatching() {
@@ -55,32 +65,6 @@ public class Bipartite {
             ArrayList<SemiEdge> adjacentList = data.getAdjacentList();
             side.put(keyNode, adjacentList);
         }
-    }
-
-    private void initializeParents() {
-        for (GraphNode currentNode : firstSide.keySet()) {
-            secondSideParent.put(currentNode, null);
-        }
-        for (GraphNode currentNode : secondSide.keySet()) {
-            firstSideParent.put(currentNode, null);
-        }
-    }
-
-    public void setFirstSideParent(GraphNode keyNode, GraphNode valueNode) {
-        firstSideParent.put(keyNode, valueNode);
-    }
-
-    public void setSecondSideParent(GraphNode keyNode, GraphNode valueNode) {
-        secondSideParent.put(keyNode, valueNode);
-    }
-
-    public GraphNode getParent(GraphNode node) {
-        //if (firstSideParent.get(node) == null && secondSideParent.get(node) == null)
-        //    return null;
-        //if (firstSideParent.get(node) != null)
-        //    return firstSideParent.get(node);
-        //return secondSideParent.get(node);
-        return secondSideParent.get(node);
     }
 
     private void resetSide(HashMap<GraphNode, ArrayList<SemiEdge>> side) {
@@ -138,41 +122,33 @@ public class Bipartite {
     }
 
     private void prepareParents() {
-        Boolean canGetAnotherPath = Boolean.TRUE;
-        while (canGetAnotherPath) {
-            canGetAnotherPath = Boolean.FALSE;
+        resultMatching = new HashMap<>();
+        for (int i = 0; i < getNodesCount(); i++) {
             NodeVisitor nodeVisitor = new NodeVisitor(this);
-            for (GraphNode currentNode : firstSide.keySet()) {
-                if (getParent(currentNode) == null && currentNode.accept(nodeVisitor))
-                    canGetAnotherPath = Boolean.TRUE;
-            }
+            getIthNode(i).accept(nodeVisitor);
         }
 
     }
 
+    private GraphNode getIthNode(int i) {
+        if (i < firstSide.keySet().size())
+            return (GraphNode) firstSide.keySet().toArray()[i];
+        return (GraphNode) secondSide.keySet().toArray()[i - firstSide.keySet().size()];
+    }
+
+    private int getNodesCount() {
+        return firstSide.keySet().size() + secondSide.keySet().size();
+    }
+
     public ArrayList<Edge> getMaxMatching() {
-        printParents();
+        resetSide(secondSide);
         prepareParents();
-        printParents();
         ArrayList<Edge> result = new ArrayList<>();
-        for (Map.Entry<GraphNode, GraphNode> currentEdge : firstSideParent.entrySet()) {
+        for (Map.Entry<GraphNode, GraphNode> currentEdge : resultMatching.entrySet()) {
             if (currentEdge.getValue() != null)
                 result.add(new Edge(currentEdge.getKey(), currentEdge.getValue()));
         }
         return result;
-    }
-
-    public void printParents() {
-        System.out.println("Second side parent");
-        for (Map.Entry<GraphNode, GraphNode> currentEdge : secondSideParent.entrySet()) {
-            System.out.println((currentEdge.getKey() != null ? currentEdge.getKey().getName() : "None")
-                    + " : " + (currentEdge.getValue() != null ? currentEdge.getValue().getName() : "None"));
-        }
-        System.out.println("First side parent");
-        for (Map.Entry<GraphNode, GraphNode> currentEdge : firstSideParent.entrySet()) {
-            System.out.println((currentEdge.getKey() != null ? currentEdge.getKey().getName() : "None")
-                    + " : " + (currentEdge.getValue() != null ? currentEdge.getValue().getName() : "None"));
-        }
     }
 
 }

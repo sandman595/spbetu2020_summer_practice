@@ -20,11 +20,9 @@ public class NodeVisitor implements Visitor {
         visited.add(node);
         for (SemiEdge currentSemiEdge : graph.getAdjacentList(node)) {
             GraphNode adjacentNode = currentSemiEdge.getNode();
-            if (graph.getParent(adjacentNode) == null || graph.getParent(adjacentNode).accept(this)) {
-                System.out.println("Been " + node.toString() + " to " + adjacentNode.toString());
-                System.out.println("Become inverted!");
-                graph.setSecondSideParent(adjacentNode, node);
-                graph.setFirstSideParent(node, adjacentNode);
+            if (graph.getMatching(adjacentNode) == null || adjacentNode.accept(this)) {
+                graph.setMatching(adjacentNode, node);
+                graph.setMatching(node, null);
                 return Boolean.TRUE;
             }
         }
