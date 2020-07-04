@@ -1,8 +1,9 @@
 package windows;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
     private final GridBagLayout gbl = new GridBagLayout();
@@ -15,16 +16,28 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         super("Vk Bipartite");
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        setBounds(tk.getScreenSize().width / 2 - 250, tk.getScreenSize().height / 2 - 200, 500, 400);
-        setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setCustomSize();
         setLayout(gbl);
         setGreeting();
         setInputLine();
         setButtonStart();
+        startButton.addActionListener(new StartActionListener());
         setVisible(true);
-        setBackground(new Color(255, 255, 255));
+        setBackground(Color.white);
+    }
+
+    class StartActionListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            new VisualWindow();
+        }
+    }
+
+    private void setCustomSize() {
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        setBounds(tk.getScreenSize().width / 2 - 250, tk.getScreenSize().height / 2 - 200, 500, 400);
+        setResizable(false);
     }
 
     private void setGreeting() {
@@ -51,7 +64,7 @@ public class MainWindow extends JFrame {
         add(inputPanel);
     }
 
-    private JPanel createInputPanel(){
+    private JPanel createInputPanel() {
         JPanel inputPanel = new JPanel();
         inputPanel.setSize(390, 10);
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
@@ -76,25 +89,5 @@ public class MainWindow extends JFrame {
         gblc.insets = new Insets(20, 0, 0, 0);
         gbl.setConstraints(startButton, gblc);
         add(startButton);
-    }
-}
-
-class RoundedBorder implements Border {
-    private final int radius;
-
-    RoundedBorder(int radius) {
-        this.radius = radius;
-    }
-
-    public Insets getBorderInsets(Component c) {
-        return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
-    }
-
-    public boolean isBorderOpaque() {
-        return true;
-    }
-
-    public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-        g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
     }
 }
