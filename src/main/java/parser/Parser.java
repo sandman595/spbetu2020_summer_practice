@@ -23,12 +23,19 @@ public class Parser {
     private final String CONFIG_PATH = "app.config";
     private VkApiClient apiClient;
     private ServiceActor actor;
+    private static Parser instance;
 
-    public Parser() {
+    private Parser() {
         TransportClient transportClient = new HttpTransportClient();
         apiClient = new VkApiClient(transportClient);
         String[] authArgsArray = getAuthArgs();
         actor = new ServiceActor(Integer.valueOf(authArgsArray[0]), authArgsArray[1], authArgsArray[2]);
+    }
+
+    public static Parser getInstance() {
+        if (instance == null)
+            return new Parser();
+        return instance;
     }
 
     private String[] getAuthArgs() {

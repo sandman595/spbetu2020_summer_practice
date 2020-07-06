@@ -12,7 +12,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         BipartiteTest.createAndPrintSimpleBipartite();
-        Parser parser = new Parser();
+        Parser parser = Parser.getInstance();
         List<Integer> resp = null;
         try {
             resp = parser.getUserFriendsIds(147946476, 5);
