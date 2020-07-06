@@ -35,8 +35,8 @@ public class MainWindow extends JFrame {
 
     private void setCustomSize() {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        setBounds(tk.getScreenSize().width / 2 - 250, tk.getScreenSize().height / 2 - 200, 500, 400);
-        setResizable(false);
+        setBounds(tk.getScreenSize().width / 2 - 300, tk.getScreenSize().height / 2 - 200, 600, 400);
+        setMinimumSize(new Dimension(600, 400));
     }
 
     private void setGreeting() {
@@ -66,16 +66,16 @@ public class MainWindow extends JFrame {
     private void setButtonStart() {
         startButton.setBackground(Color.white);
         startButton.setBorder(new RoundedBorder(10));
-        startButton.setPreferredSize(new Dimension(30, 7));
         startButton.addActionListener(new StartActionListener());
         consLayout.gridwidth = GridBagConstraints.NONE;
         consLayout.gridx = 1;
         consLayout.gridy = GridBagConstraints.RELATIVE;
         consLayout.ipadx = 30;
-        consLayout.ipady = 7;
+        consLayout.ipady = 10;
         consLayout.fill = GridBagConstraints.NONE;
         consLayout.insets = new Insets(20, 0, 0, 0);
         gbl.setConstraints(startButton, consLayout);
+
         add(startButton);
     }
 }
@@ -86,12 +86,13 @@ class InputPanel extends JPanel {
 
     InputPanel() {
         super();
-        setSize(390, 10);
+        setPreferredSize(new Dimension(390, 10));
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setPreferredSize(new Dimension(50, 10));
         inputLabel.setHorizontalTextPosition(JLabel.RIGHT);
         add(inputLabel);
         inputLine.setPreferredSize(new Dimension(300, 10));
+        add(Box.createHorizontalStrut(10));
         add(inputLine);
     }
 }

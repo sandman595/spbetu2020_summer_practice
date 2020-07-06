@@ -8,9 +8,9 @@ import java.awt.event.ActionListener;
 public class VisualWindow extends JFrame {
     private final GridBagLayout gbl = new GridBagLayout();
     private final GridBagConstraints consLayout = new GridBagConstraints();
-    private final BoardNode userBoard = new BoardNode();
+    private final BoardUser userBoard = new BoardUser();
     private final BoardEdge edgeBoard = new BoardEdge();
-    private final BoardNode groupBoard = new BoardNode();
+    private final BoardGroup groupBoard = new BoardGroup();
     private final ButtonPanel buttonPanel = new ButtonPanel();
 
     VisualWindow() {
@@ -42,11 +42,12 @@ public class VisualWindow extends JFrame {
         consLayout.gridwidth = 1;
         consLayout.gridx = 1;
         consLayout.gridy = 1;
+        consLayout.insets = new Insets(0,0,0,0);
         consLayout.ipadx = userBoard.getWidth();
         consLayout.ipady = userBoard.getHeight();
         gbl.setConstraints(userBoard, consLayout);
         add(userBoard);
-        userBoard.setBackground(Color.BLUE);
+//        userBoard.setBackground(Color.BLUE);
     }
 
     private void setEdgeBoard() {
@@ -56,7 +57,7 @@ public class VisualWindow extends JFrame {
         consLayout.ipady = edgeBoard.getHeight();
         gbl.setConstraints(edgeBoard, consLayout);
         add(edgeBoard);
-        edgeBoard.setBackground(Color.RED);
+//        edgeBoard.setBackground(Color.RED);
     }
 
     private void setGroupBoard() {
@@ -66,17 +67,32 @@ public class VisualWindow extends JFrame {
         consLayout.ipady = groupBoard.getHeight();
         gbl.setConstraints(groupBoard, consLayout);
         add(groupBoard);
-        groupBoard.setBackground(Color.GREEN);
+//        groupBoard.setBackground(Color.GREEN);
     }
 
     private void setButtonPanel() {
-        consLayout.anchor = GridBagConstraints.SOUTH;
+//        consLayout.anchor = GridBagConstraints.SOUTH;
         consLayout.gridx = 4;
-        consLayout.ipady = 1;
+        consLayout.gridy = 1;
+        consLayout.insets = new Insets(0, 10, 0, 0);
         consLayout.ipadx = buttonPanel.getWidth();
         consLayout.ipady = buttonPanel.getHeight();
         gbl.setConstraints(buttonPanel, consLayout);
         add(buttonPanel);
+        buttonPanel.play.addActionListener((ActionEvent e) -> {
+            userBoard.add(Color.RED);
+            userBoard.add(Color.GREEN);
+            userBoard.add(Color.BLUE);
+            groupBoard.add(Color.RED);
+            groupBoard.add(Color.GREEN);
+            groupBoard.add(Color.BLUE);
+            edgeBoard.setEdges(Color.BLACK);
+        });
+        buttonPanel.step.addActionListener((ActionEvent e) -> {
+            userBoard.erase();
+            groupBoard.erase();
+            edgeBoard.erase();
+        });
     }
 }
 
@@ -86,35 +102,11 @@ class ButtonPanel extends JPanel{
 
     ButtonPanel() {
         super();
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        step.setBorder(new RoundedBorder(10));
-        play.setBorder(new RoundedBorder(10));
-        step.addActionListener(new StepActionListener());
-        play.addActionListener(new PlayActionListener());
-        gridBagConstraints.anchor = GridBagConstraints.EAST;
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagLayout.setConstraints(step, gridBagConstraints);
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagLayout.setConstraints(step, gridBagConstraints);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setPreferredSize(new Dimension(50, 10));
         add(step);
+        add(Box.createHorizontalStrut(10));
         add(play);
-        setLayout(gridBagLayout);
     }
 
-    static class StepActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("Step pressed");
-        }
-    }
-
-    static class PlayActionListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("Play pressed");
-        }
-    }
 }
