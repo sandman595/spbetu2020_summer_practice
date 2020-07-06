@@ -107,7 +107,6 @@ public class Bipartite {
     }
 
     public ArrayList<Edge> getMaxMatching() {
-        //resetSide(secondSide);
         prepareParents();
         ArrayList<Edge> result = new ArrayList<>();
         for (Map.Entry<GraphNode, GraphNode> currentEdge : resultMatching.entrySet()) {
