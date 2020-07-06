@@ -1,3 +1,5 @@
+import windows.MainWindow;
+
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.objects.friends.responses.GetResponse;
@@ -24,5 +26,6 @@ public class Main {
         for (Integer usrId : resp) {
             System.out.println(usrId);
         }
+        MainWindow app = new MainWindow();
     }
 }
