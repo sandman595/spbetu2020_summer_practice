@@ -20,9 +20,9 @@ public class NodeVisitor implements Visitor {
         visited.add(node);
         for (SemiEdge currentSemiEdge : graph.getAdjacentList(node)) {
             GraphNode adjacentNode = currentSemiEdge.getNode();
-            if (graph.getMatching(adjacentNode) == null || adjacentNode.accept(this)) {
-                graph.setMatching(adjacentNode, node);
-                graph.setMatching(node, null);
+            if (graph.getResultMatching(adjacentNode) == null || adjacentNode.accept(this)) {
+                graph.setResultMatching(adjacentNode, node);
+                graph.setResultMatching(node, null);
                 return Boolean.TRUE;
             }
         }
