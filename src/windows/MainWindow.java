@@ -7,27 +7,26 @@ import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
     private final GridBagLayout gbl = new GridBagLayout();
-    private final GridBagConstraints gblc = new GridBagConstraints();
+    private final GridBagConstraints consLayout = new GridBagConstraints();
     private final JLabel greeting = new JLabel("<html><p align=center>VK Bipartite<br>v.0.1</p></html>");
-    private final JLabel inputLabel = new JLabel("VK ID:");
-    private final JTextField inputLine = new JTextField();
-    private final JPanel inputPanel = createInputPanel();
+    private final JPanel inputPanel = new InputPanel();
     private final JButton startButton = new JButton("Start!");
 
     public MainWindow() {
         super("Vk Bipartite");
+        ImageIcon icon = new ImageIcon("res/icon.png");
+        setIconImage(icon.getImage());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setCustomSize();
         setLayout(gbl);
         setGreeting();
-        setInputLine();
+        setInputPanel();
         setButtonStart();
-        startButton.addActionListener(new StartActionListener());
         setVisible(true);
         setBackground(Color.white);
     }
 
-    class StartActionListener implements ActionListener{
+    static class StartActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             new VisualWindow();
@@ -42,52 +41,58 @@ public class MainWindow extends JFrame {
 
     private void setGreeting() {
         greeting.setHorizontalAlignment(JLabel.CENTER);
-        gblc.anchor = GridBagConstraints.NORTH;
-        gblc.fill = GridBagConstraints.HORIZONTAL;
-        gblc.gridheight = 1;
-        gblc.gridwidth = GridBagConstraints.REMAINDER;
-        gblc.gridx = 1;
-        gblc.gridy = 1;
-        gblc.ipadx = 490;
-        gblc.ipady = 190;
-        gbl.setConstraints(greeting, gblc);
+        consLayout.anchor = GridBagConstraints.NORTH;
+        consLayout.fill = GridBagConstraints.HORIZONTAL;
+        consLayout.gridheight = 1;
+        consLayout.gridwidth = GridBagConstraints.REMAINDER;
+        consLayout.gridx = 1;
+        consLayout.gridy = 1;
+        consLayout.ipadx = 490;
+        consLayout.ipady = 190;
+        gbl.setConstraints(greeting, consLayout);
         add(greeting);
     }
 
-    private void setInputLine() {
-        gblc.gridy = GridBagConstraints.RELATIVE;
-        gblc.gridx = 1;
-        gblc.ipadx = 300;
-        gblc.fill = GridBagConstraints.NONE;
-        gblc.ipady = 10;
-        gbl.setConstraints(inputPanel, gblc);
+    private void setInputPanel() {
+        consLayout.gridy = GridBagConstraints.RELATIVE;
+        consLayout.gridx = 1;
+        consLayout.ipadx = 300;
+        consLayout.fill = GridBagConstraints.NONE;
+        consLayout.ipady = 10;
+        gbl.setConstraints(inputPanel, consLayout);
         add(inputPanel);
-    }
-
-    private JPanel createInputPanel() {
-        JPanel inputPanel = new JPanel();
-        inputPanel.setSize(390, 10);
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.X_AXIS));
-        inputLabel.setPreferredSize(new Dimension(50, 10));
-        inputLabel.setHorizontalTextPosition(JLabel.RIGHT);
-        inputPanel.add(inputLabel);
-        inputLine.setPreferredSize(new Dimension(300, 10));
-        inputPanel.add(inputLine);
-        return inputPanel;
     }
 
     private void setButtonStart() {
         startButton.setBackground(Color.white);
         startButton.setBorder(new RoundedBorder(10));
         startButton.setPreferredSize(new Dimension(30, 7));
-        gblc.gridwidth = GridBagConstraints.NONE;
-        gblc.gridx = 1;
-        gblc.gridy = GridBagConstraints.RELATIVE;
-        gblc.ipadx = 30;
-        gblc.ipady = 7;
-        gblc.fill = GridBagConstraints.NONE;
-        gblc.insets = new Insets(20, 0, 0, 0);
-        gbl.setConstraints(startButton, gblc);
+        startButton.addActionListener(new StartActionListener());
+        consLayout.gridwidth = GridBagConstraints.NONE;
+        consLayout.gridx = 1;
+        consLayout.gridy = GridBagConstraints.RELATIVE;
+        consLayout.ipadx = 30;
+        consLayout.ipady = 7;
+        consLayout.fill = GridBagConstraints.NONE;
+        consLayout.insets = new Insets(20, 0, 0, 0);
+        gbl.setConstraints(startButton, consLayout);
         add(startButton);
     }
 }
+
+class InputPanel extends JPanel {
+    private final JLabel inputLabel = new JLabel("VK ID:");
+    private final JTextField inputLine = new JTextField();
+
+    InputPanel() {
+        super();
+        setSize(390, 10);
+        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        setPreferredSize(new Dimension(50, 10));
+        inputLabel.setHorizontalTextPosition(JLabel.RIGHT);
+        add(inputLabel);
+        inputLine.setPreferredSize(new Dimension(300, 10));
+        add(inputLine);
+    }
+}
+
