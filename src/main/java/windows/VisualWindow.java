@@ -42,7 +42,7 @@ public class VisualWindow extends JFrame {
         consLayout.gridwidth = 1;
         consLayout.gridx = 1;
         consLayout.gridy = 1;
-        consLayout.insets = new Insets(0,0,0,0);
+        consLayout.insets = new Insets(0, 0, 0, 0);
         consLayout.ipadx = userBoard.getWidth();
         consLayout.ipady = userBoard.getHeight();
         gbl.setConstraints(userBoard, consLayout);
@@ -96,7 +96,7 @@ public class VisualWindow extends JFrame {
     }
 }
 
-class ButtonPanel extends JPanel{
+class ButtonPanel extends JPanel {
     JButton step = new JButton("Step");
     JButton play = new JButton("Play");
 

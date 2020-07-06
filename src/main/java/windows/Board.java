@@ -10,8 +10,6 @@ abstract public class Board extends JPanel {
         setBackground(Color.white);
     }
 
-
-
     public void erase() {
         paintComponent(getGraphics());
     }
@@ -23,11 +21,13 @@ abstract class BoardNode extends Board {
     BoardNode() {
         super(100, 600);
     }
+
     public void add(Color clr) {
     }
+
     public void erase() {
         super.erase();
-        count=0;
+        count = 0;
     }
 
 }
@@ -42,7 +42,7 @@ class BoardUser extends BoardNode {
 
     @Override
     public void add(Color clr) {
-        if (count > 2){
+        if (count > 2) {
             return;
         }
         Graphics g = getGraphics();
@@ -64,7 +64,7 @@ class BoardGroup extends BoardNode {
 
     @Override
     public void add(Color clr) {
-        if (count > 2){
+        if (count > 2) {
             return;
         }
         Graphics g = getGraphics();
@@ -84,9 +84,9 @@ class BoardEdge extends Board {
     public void setEdges(Color clr) {
         Graphics g = getGraphics();
         g.setColor(clr);
-        g.drawLine(0, 50+0*110, width, 25+0*60);
-        g.drawLine(0, 50+0*110, width, 25+1*60);
-        g.drawLine(0, 50+1*110, width, 25+2*60);
-        g.drawLine(0, 50+2*110, width, 25+1*60);
+        g.drawLine(0, 50 + 0 * 110, width, 25 + 0 * 60);
+        g.drawLine(0, 50 + 0 * 110, width, 25 + 1 * 60);
+        g.drawLine(0, 50 + 1 * 110, width, 25 + 2 * 60);
+        g.drawLine(0, 50 + 2 * 110, width, 25 + 1 * 60);
     }
 }
