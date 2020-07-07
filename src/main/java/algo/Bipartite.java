@@ -116,4 +116,22 @@ public class Bipartite {
         return result;
     }
 
+    public ArrayList<GraphNode> getFirstSide() {
+        return firstSide;
+    }
+
+    public ArrayList<GraphNode> getSecondSide() {
+        return secondSide;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        ArrayList<Edge> edgesList = new ArrayList<>();
+        for (Map.Entry<GraphNode, ArrayList<SemiEdge>> nodeEdgesList : listOfEdges.entrySet()) {
+            for (SemiEdge semiEdge : nodeEdgesList.getValue()) {
+                edgesList.add(new Edge(nodeEdgesList.getKey(), semiEdge.getNode()));
+            }
+        }
+        return edgesList;
+    }
+
 }
