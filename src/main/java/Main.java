@@ -1,31 +1,28 @@
-import windows.MainWindow;
+import algo.Bipartite;
+import algo.Edge;
+import parser.ParserFacade;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
-import com.vk.api.sdk.objects.friends.responses.GetResponse;
-import com.vk.api.sdk.objects.users.UserXtrCounters;
-
-import parser.Parser;
-import tests.BipartiteTest;
-
-import java.util.List;
-
 
 public class Main {
-    public static void main(String[] args) {
-        BipartiteTest.createAndPrintSimpleBipartite();
-        Parser parser = Parser.getInstance();
-        List<Integer> resp = null;
+    public static void main(String[] args){
+        ParserFacade parserFacade = new ParserFacade();
         try {
-            resp = parser.getUserFriendsIds(147946476, 5);
+            Bipartite bip = new Bipartite(parserFacade.getMatchingDataList(178443156));
+            System.out.println(bip.toString());
+            for (Edge currentEdge : bip.getMaxMatching()) {
+                System.out.println(currentEdge.toString());
+            }
         } catch (ClientException e) {
             e.printStackTrace();
         } catch (ApiException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        for (Integer usrId : resp) {
-            System.out.println(usrId);
-        }
-        MainWindow app = new MainWindow();
+
+
+        //MainWindow app = new MainWindow();
     }
 }

@@ -76,10 +76,10 @@ public class Bipartite {
     private String graphToString(HashMap<GraphNode, ArrayList<SemiEdge>> graph) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<GraphNode, ArrayList<SemiEdge>> currentPair : graph.entrySet()) {
-            builder.append("\t\t" + currentPair.getKey().getName());
+            builder.append("\t\t" + currentPair.getKey().toString());
             builder.append(" : ");
             for (SemiEdge currentSemiEdge : currentPair.getValue()) {
-                builder.append(currentSemiEdge.getNode().getName() + " ");
+                builder.append(currentSemiEdge.getNode().toString() + " ");
             }
             builder.append("\n");
         }

@@ -1,18 +1,14 @@
 package algo;
 
+import parser.ItemData;
+
 import java.util.Objects;
 
 public class GraphNode {
-    private Integer id;
-    private String name;
+    private ItemData data;
 
-    public GraphNode(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
+    public GraphNode(ItemData data) {
+        this.data = data;
     }
 
     public Boolean accept(Visitor visitor) {
@@ -20,7 +16,7 @@ public class GraphNode {
     }
 
     public String toString() {
-        return name;
+        return data.toString();
     }
 
     @Override
@@ -28,27 +24,14 @@ public class GraphNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GraphNode graphNode = (GraphNode) o;
-        return id.equals(graphNode.id) &&
-                name.equals(graphNode.name);
+        return data.id.equals(graphNode.data.id) &&
+                data.name.equals(graphNode.data.name) &&
+                data.photo.equals(graphNode.data.photo);
     }
 
     @Override
     public int hashCode() {
-        return id;
-    }
-}
-
-class UserNode extends GraphNode {
-
-    public UserNode(Integer id, String name) {
-        super(id, name);
-    }
-}
-
-class GroupNode extends GraphNode {
-
-    public GroupNode(Integer id, String name) {
-        super(id, name);
+        return data.photo.hashCode();
     }
 }
 

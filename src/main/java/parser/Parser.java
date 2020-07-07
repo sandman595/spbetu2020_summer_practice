@@ -5,23 +5,18 @@ import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.ServiceActor;
 import com.vk.api.sdk.client.actors.UserActor;
+import com.vk.api.sdk.exceptions.ApiAccessException;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.UserAuthResponse;
 import com.vk.api.sdk.objects.enums.FriendsOrder;
 import com.vk.api.sdk.objects.groups.GroupFull;
-import com.vk.api.sdk.objects.groups.responses.GetResponse;
-import com.vk.api.sdk.objects.users.User;
+import com.vk.api.sdk.objects.photos.Photo;
+import com.vk.api.sdk.objects.photos.responses.GetResponse;
+import com.vk.api.sdk.objects.users.UserXtrCounters;
 
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parser {
     private VkApiClient apiClient;
@@ -34,17 +29,6 @@ public class Parser {
         apiClient = new VkApiClient(transportClient);
         serviceActor = Auth.getServiceActor();
         userActor = Auth.getUserActor();
-        try {
-            List<Integer> execute = apiClient.groups().get(userActor).count(10).userId(147946476).execute().getItems();
-            System.out.println(apiClient.groups().get(userActor).userId(147946476).execute().toPrettyString());
-            System.out.println(apiClient.groups().getById(userActor).groupId("179649106").execute());
-            for (Integer grpId : execute) {
-            }
-        } catch (ApiException e) {
-            e.printStackTrace();
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -65,12 +49,39 @@ public class Parser {
                 .getItems();
     }
 
-    public List<Integer> getUserCommunities(Integer userId, Integer count) throws ClientException, ApiException {
+    public List<Integer> getUserCommunitiesIds(Integer userId, Integer count) throws ClientException, ApiException {
         return apiClient.groups().get(userActor)
+                .userId(userId)
                 .lang(Lang.RU)
                 .count(count)
                 .execute()
                 .getItems();
+    }
+
+    public List<GroupFull> getGroupsByid(List<Integer> listOfGroupIds) throws ClientException, ApiException {
+        return apiClient.groups().getById(userActor)
+                .groupIds(listOfGroupIds.stream().map(item -> String.valueOf(item)).collect(Collectors.toList()))
+                .execute();
+    }
+
+    public List<UserXtrCounters> getUsersByIds(List<Integer> listOfUserIds) throws ClientException, ApiException {
+        return apiClient.users().get(userActor)
+                .userIds(listOfUserIds.stream().map(item -> String.valueOf(item)).collect(Collectors.toList()))
+                .execute();
+    }
+
+    public List<Photo> getUserAvatars(Integer userId) throws ClientException, ApiException {
+        return apiClient.photos().get(userActor)
+                .ownerId(userId).albumId("profile")
+                .execute().getItems();
+    }
+
+    public String getAvatarURL(Integer userId) throws ClientException, ApiException {
+        List<Photo> profilePhotoList = getUserAvatars(userId);
+        if (profilePhotoList.size() == 0)
+            return "default";
+        Photo avatarItself = profilePhotoList.get(profilePhotoList.size() - 1);
+        return avatarItself.getSizes().get(0).getUrl().toString();
     }
 
 }
