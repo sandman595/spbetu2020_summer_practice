@@ -76,10 +76,10 @@ public class Bipartite {
     private String graphToString(HashMap<GraphNode, ArrayList<SemiEdge>> graph) {
         StringBuilder builder = new StringBuilder();
         for (Map.Entry<GraphNode, ArrayList<SemiEdge>> currentPair : graph.entrySet()) {
-            builder.append("\t\t" + currentPair.getKey().getName());
+            builder.append("\t\t" + currentPair.getKey().toString());
             builder.append(" : ");
             for (SemiEdge currentSemiEdge : currentPair.getValue()) {
-                builder.append(currentSemiEdge.getNode().getName() + " ");
+                builder.append(currentSemiEdge.getNode().toString() + " ");
             }
             builder.append("\n");
         }
@@ -114,6 +114,24 @@ public class Bipartite {
                 result.add(new Edge(currentEdge.getValue(), currentEdge.getKey()));
         }
         return result;
+    }
+
+    public ArrayList<GraphNode> getFirstSide() {
+        return firstSide;
+    }
+
+    public ArrayList<GraphNode> getSecondSide() {
+        return secondSide;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        ArrayList<Edge> edgesList = new ArrayList<>();
+        for (Map.Entry<GraphNode, ArrayList<SemiEdge>> nodeEdgesList : listOfEdges.entrySet()) {
+            for (SemiEdge semiEdge : nodeEdgesList.getValue()) {
+                edgesList.add(new Edge(nodeEdgesList.getKey(), semiEdge.getNode()));
+            }
+        }
+        return edgesList;
     }
 
 }
