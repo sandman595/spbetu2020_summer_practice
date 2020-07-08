@@ -16,62 +16,41 @@ abstract public class Board extends JPanel {
 }
 
 abstract class BoardNode extends Board {
-    protected int count = 0;
-
     BoardNode() {
         super(100, 600);
     }
-
-    public void add(Color clr) {
+    protected int dy;
+    public void add(Node n) {
+        Graphics g = getGraphics();
+        g.drawImage(n.img.getImage(), 0, dy*n.index, null);
+        g.setFont(new Font("Serif", Font.ITALIC, 16));
+        g.drawString(n.text, 0, dy*n.index + 110);
     }
 
     public void erase() {
         super.erase();
-        count = 0;
     }
 
 }
 
 class BoardUser extends BoardNode {
-    private final int dy = 110;
-    private final int r = 100;
 
     BoardUser() {
         super();
+        super.dy = 120;
     }
-
-    @Override
-    public void add(Color clr) {
-        if (count > 2) {
-            return;
-        }
-        Graphics g = getGraphics();
-        g.setColor(clr);
-        g.fillOval(0, count * dy, r, r);
-        ++count;
-    }
-
 }
 
 
 class BoardGroup extends BoardNode {
-    private final int dy = 60;
     private final int r = 50;
 
     BoardGroup() {
         super();
+        super.dy = 60;
     }
 
-    @Override
-    public void add(Color clr) {
-        if (count > 2) {
-            return;
-        }
-        Graphics g = getGraphics();
-        g.setColor(clr);
-        g.fillOval(0, count * dy, r, r);
-        ++count;
-    }
+
 }
 
 class BoardEdge extends Board {

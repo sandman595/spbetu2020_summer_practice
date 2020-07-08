@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
-public class VisualWindow extends JFrame {
+public class VisualWindow extends JDialog {
     private final GridBagLayout gbl = new GridBagLayout();
     private final GridBagConstraints consLayout = new GridBagConstraints();
     private final BoardUser userBoard = new BoardUser();
@@ -13,9 +14,11 @@ public class VisualWindow extends JFrame {
     private final BoardGroup groupBoard = new BoardGroup();
     private final ButtonPanel buttonPanel = new ButtonPanel();
 
-    VisualWindow() {
-        super("Visualization");
+    VisualWindow() throws IOException {
+        super();
         ImageIcon icon = new ImageIcon("res/icon.png");
+        setModal(true);
+        setTitle("Visualization");
         setIconImage(icon.getImage());
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setBackground(Color.lightGray);
@@ -26,7 +29,6 @@ public class VisualWindow extends JFrame {
         setButtonPanel();
         setLayout(gbl);
         setVisible(true);
-        // TODO: check id
     }
 
     private void setCustomSize() {
@@ -70,8 +72,7 @@ public class VisualWindow extends JFrame {
 //        groupBoard.setBackground(Color.GREEN);
     }
 
-    private void setButtonPanel() {
-//        consLayout.anchor = GridBagConstraints.SOUTH;
+    private void setButtonPanel() throws IOException {
         consLayout.gridx = 4;
         consLayout.gridy = 1;
         consLayout.insets = new Insets(0, 10, 0, 0);
@@ -79,19 +80,14 @@ public class VisualWindow extends JFrame {
         consLayout.ipady = buttonPanel.getHeight();
         gbl.setConstraints(buttonPanel, consLayout);
         add(buttonPanel);
+        GraphNode n = new GraphNode("https://sun9-8.userapi.com/impf/c851036/v851036709/bda4/RB2denXpiSk.jpg?size=200x0&quality=90&sign=2f103127343674f44c2548671cd49ad0&ava=1", "Санех", 0, GraphNode.Side.LEFT);
+        GraphNode n2 = new GraphNode("https://sun9-61.userapi.com/c858420/v858420103/a71a3/npqvpQOn8ys.jpg", "Илюх", 1, GraphNode.Side.LEFT);
+
         buttonPanel.play.addActionListener((ActionEvent e) -> {
-            userBoard.add(Color.RED);
-            userBoard.add(Color.GREEN);
-            userBoard.add(Color.BLUE);
-            groupBoard.add(Color.RED);
-            groupBoard.add(Color.GREEN);
-            groupBoard.add(Color.BLUE);
-            edgeBoard.setEdges(Color.BLACK);
+            userBoard.add(n);
+            userBoard.add(n2);
         });
         buttonPanel.step.addActionListener((ActionEvent e) -> {
-            userBoard.erase();
-            groupBoard.erase();
-            edgeBoard.erase();
         });
     }
 }
@@ -104,6 +100,8 @@ class ButtonPanel extends JPanel {
         super();
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         setPreferredSize(new Dimension(50, 10));
+        step.setBorder(new RoundedBorder(10));
+        play.setBorder(new RoundedBorder(10));
         add(step);
         add(Box.createHorizontalStrut(10));
         add(play);
