@@ -4,6 +4,7 @@ import parser.ParserFacade;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import windows.MainWindow;
 
 public class Main {
     public static void main(String[] args){
@@ -23,6 +24,6 @@ public class Main {
         }
 
 
-        //MainWindow app = new MainWindow();
+        MainWindow app = MainWindow.getInstance();
     }
 }
