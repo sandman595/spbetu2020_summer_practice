@@ -1,5 +1,9 @@
 package windows;
 
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import parser.Parser;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,8 +16,15 @@ public class MainWindow extends JFrame {
     private final JLabel greeting = new JLabel("<html><p align=center>VK Bipartite<br>v.0.1</p></html>");
     private final InputPanel inputPanel = new InputPanel();
     private final JButton startButton = new JButton("Start!");
+    private static MainWindow instance;
 
-    public MainWindow() {
+    public static MainWindow getInstance(){
+        if (instance == null)
+            instance = new MainWindow();
+        return instance;
+    }
+
+    private MainWindow() {
         super("Vk Bipartite");
         ImageIcon icon = new ImageIcon("res/icon.png");
         setIconImage(icon.getImage());
@@ -24,13 +35,20 @@ public class MainWindow extends JFrame {
         setInputPanel();
         setButtonStart();
         setBackground(Color.white);
+        setVisible(true);
     }
 
     static class StartActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                new VisualWindow();
+                VisualWindow.getInstance();
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            } catch (ClientException clientException) {
+                clientException.printStackTrace();
+            } catch (ApiException apiException) {
+                apiException.printStackTrace();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

@@ -1,5 +1,10 @@
 package windows;
 
+import algo.Bipartite;
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
+import parser.ParserFacade;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,9 +18,19 @@ public class VisualWindow extends JDialog {
     private final BoardEdge edgeBoard = new BoardEdge();
     private final BoardGroup groupBoard = new BoardGroup();
     private final ButtonPanel buttonPanel = new ButtonPanel();
+    private Bipartite bip;
+    private static VisualWindow instance;
 
-    VisualWindow() throws IOException {
+    public static VisualWindow getInstance() throws InterruptedException, ClientException, ApiException, IOException {
+        if (instance == null)
+            instance = new VisualWindow();
+        instance.setVisible(true);
+        return instance;
+    }
+
+    private VisualWindow() throws IOException, InterruptedException, ClientException, ApiException {
         super();
+        bip = new Bipartite(new ParserFacade().getMatchingDataList(147946476));
         ImageIcon icon = new ImageIcon("res/icon.png");
         setModal(true);
         setTitle("Visualization");
@@ -28,12 +43,11 @@ public class VisualWindow extends JDialog {
         setGroupBoard();
         setButtonPanel();
         setLayout(gbl);
-        setVisible(true);
     }
 
     private void setCustomSize() {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        setBounds(tk.getScreenSize().width / 2 - 350, tk.getScreenSize().height / 2 - 300, 700, 600);
+        setBounds(tk.getScreenSize().width / 2 - 350, tk.getScreenSize().height / 2 - 100, 700, 900);
         setResizable(false);
     }
 
@@ -80,14 +94,17 @@ public class VisualWindow extends JDialog {
         consLayout.ipady = buttonPanel.getHeight();
         gbl.setConstraints(buttonPanel, consLayout);
         add(buttonPanel);
-        GraphNode n = new GraphNode("https://sun9-8.userapi.com/impf/c851036/v851036709/bda4/RB2denXpiSk.jpg?size=200x0&quality=90&sign=2f103127343674f44c2548671cd49ad0&ava=1", "Санех", 0, GraphNode.Side.LEFT);
-        GraphNode n2 = new GraphNode("https://sun9-61.userapi.com/c858420/v858420103/a71a3/npqvpQOn8ys.jpg", "Илюх", 1, GraphNode.Side.LEFT);
-
         buttonPanel.play.addActionListener((ActionEvent e) -> {
-            userBoard.add(n);
-            userBoard.add(n2);
+            try {
+                userBoard.setNodes(bip.getFirstSide());
+                groupBoard.setNodes(bip.getSecondSide());
+                edgeBoard.setEdges(bip);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         buttonPanel.step.addActionListener((ActionEvent e) -> {
+            edgeBoard.showBipartite(bip);
         });
     }
 }
